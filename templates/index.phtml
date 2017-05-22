@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>filehosting</title>
+</head>
+<body>
+    <h1>filehosting</h1>
+
+    <form method="post" action="/" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" name="submit">
+
+        <?php if (isset($error) and $error != 0) : ?>
+            <span>Error</span>
+        <?php endif; ?>
+
+        <input type="hidden" name="<?= $csrfNameKey ?>" value="<?= $csrfName ?>">
+        <input type="hidden" name="<?= $csrfValueKey ?>" value="<?= $csrfValue ?>">
+    </form>
+
+    <ul>
+        <?php foreach ($files as $file) : ?>
+            <li>
+                <a href="<?= $router->pathFor('download', ['id' => $file->getId()])?>">
+                    <?= $file->getName() ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</body>
+</html>

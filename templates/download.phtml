@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download</title>
+</head>
+<body>
+    <h1>filehosting</h1>
+
+    <h2><?= $file->getName() ?></h2>
+
+    <ul>
+        <li>Size: <?= $file->getSize() ?></li>
+        <li>Type: ...</li>
+
+        <!-- mb somthing more -->
+    </ul>
+
+    <a href="/files/<?= $file->getPath() ?>/<?= $file->getName() ?>" download>
+        Download <?= $file->getName() ?>
+    </a>
+</body>
+</html>
