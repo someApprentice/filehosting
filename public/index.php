@@ -3,6 +3,8 @@ require(__DIR__ . '/../src/init.php');
 
 use Slim\App; 
 
+use App\Model;
+
 use App\Entity\File;
 
 session_start();
@@ -36,45 +38,21 @@ $app->get('/', function ($request, $response) {
 $app->post('/', function ($request, $response) {
     $em = $this->get('EntityManager');
 
-    //path generation should be in model
-    $last = $em->getRepository('App\Entity\File')->findOneBy([], ['id' => 'DESC']);
-
-    if ($last) {
-        $query = $em->createQuery("SELECT COUNT(f) FROM App\Entity\File f WHERE f.path = :path");
-        $query->setParameter('path', $last->getPath());
-        $count = $query->getSingleScalarResult();
-
-        if ($count == 1000) {
-            $path = (string) rand();
-
-            mkdir("files/{$path}");
-        } else {
-            $path = $last->getPath();
-        }
-    } else {
-        $path = (string) rand();
-
-        mkdir("files/{$path}");
-    }
-
     $file = $request->getUploadedFiles()['file'];
 
     $error = $file->getError();
 
     if ($error == 0) {
-        $name = $file->getClientFilename();
+        $originalName = $file->getClientFilename();
+        $newName = Model::generateNewNameForFile($file);
         $size = $file->getSize();
+        $path = Model::generatePath();
 
-        if (file_exists(__DIR__ . "/files/{$path}/{$name}")) {
-            $path = (string) rand();
-
-            mkdir("files/{$path}");
-        }
-
-        $file->moveTo(__DIR__ . "/files/$path/$name");
+        $file->moveTo(__DIR__ . "/$path/$newName");
 
         $file = new File();
-        $file->setName($name);
+        $file->setOriginalName($originalName);
+        $file->setNewName($newName);
         $file->setSize($size);
         $file->setPath($path);
 

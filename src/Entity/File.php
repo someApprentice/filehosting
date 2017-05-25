@@ -10,7 +10,10 @@ class File
     protected $id;
 
     /** @Column(type="string") **/
-    protected $name;
+    protected $originalname;
+
+    /** @Column(type="string") **/
+    protected $newname;
 
     /** @Column(type="integer") **/
     protected $size;
@@ -23,14 +26,25 @@ class File
         return $this->id;
     }
 
-    public function getName()
+    public function getOriginalName()
     {
-        return $this->name;
+        return $this->originalname;
     }
 
-    public function setName($name)
+    public function setOriginalName($originalname)
     {
-        $this->name = $name;
+        $this->originalname = $originalname;
+
+        return $this;
+    }
+    public function getNewName()
+    {
+        return $this->newname;
+    }
+
+    public function setNewName($newname)
+    {
+        $this->newname = $newname;
 
         return $this;
     }

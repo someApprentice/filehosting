@@ -6,7 +6,7 @@
 <body>
     <h1>filehosting</h1>
 
-    <h2><?= $file->getName() ?></h2>
+    <h2><?= $file->getOriginalName() ?></h2>
 
     <ul>
         <li>Size: <?= $file->getSize() ?></li>
@@ -15,8 +15,8 @@
         <!-- mb somthing more -->
     </ul>
 
-    <a href="/files/<?= $file->getPath() ?>/<?= $file->getName() ?>" download>
-        Download <?= $file->getName() ?>
+    <a href="/<?= $file->getPath() ?>/<?= $file->getNewName() ?>" download>
+        Download <?= $file->getOriginalName() ?>
     </a>
 </body>
 </html>

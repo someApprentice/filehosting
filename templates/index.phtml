@@ -22,7 +22,7 @@
         <?php foreach ($files as $file) : ?>
             <li>
                 <a href="<?= $router->pathFor('download', ['id' => $file->getId()])?>">
-                    <?= $file->getName() ?>
+                    <?= $file->getOriginalName() ?>
                 </a>
             </li>
         <?php endforeach; ?>
