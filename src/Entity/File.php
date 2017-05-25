@@ -21,6 +21,9 @@ class File
     /** @Column(type="string") **/
     protected $path;
 
+    /** @Column(type="string") **/
+    protected $mimetype;
+
     public function getId()
     {
         return $this->id;
@@ -70,6 +73,18 @@ class File
     {
         $this->path = $path;
         
+        return $this;
+    }
+
+    public function getMimeType()
+    {
+        return $this->mimetype;
+    }
+
+    public function setMimeType($mimetype)
+    {
+        $this->mimetype = $mimetype;
+
         return $this;
     }
 }

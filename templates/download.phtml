@@ -10,12 +10,12 @@
 
     <ul>
         <li>Size: <?= $file->getSize() ?></li>
-        <li>Type: ...</li>
+        <li>Type: <?= $file->getMimeType() ?></li>
 
         <!-- mb somthing more -->
     </ul>
 
-    <a href="/<?= $file->getPath() ?>/<?= $file->getNewName() ?>" download>
+    <a href="<?= $router->pathFor('dwnld', ['id' => $file->getId()]) ?>">
         Download <?= $file->getOriginalName() ?>
     </a>
 </body>

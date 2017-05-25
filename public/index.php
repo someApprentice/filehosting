@@ -47,6 +47,7 @@ $app->post('/', function ($request, $response) {
         $newName = Model::generateNewNameForFile($file);
         $size = $file->getSize();
         $path = Model::generatePath();
+        $mimetype = $file->getClientMediaType();
 
         $file->moveTo(__DIR__ . "/$path/$newName");
 
@@ -55,6 +56,7 @@ $app->post('/', function ($request, $response) {
         $file->setNewName($newName);
         $file->setSize($size);
         $file->setPath($path);
+        $file->setMimeType($mimetype);
 
         $em->persist($file);
         $em->flush();
@@ -77,5 +79,16 @@ $app->get('/download/{id}', function ($request, $response, $args) {
         'file' => $file
     ]);
 })->setName('download');
+
+$app->get('/dwnld/{id}', function($request, $response, $args) {
+    $em = $this->get('EntityManager');
+
+    $file = $em->getRepository('App\Entity\File')->find($args['id']);
+
+    header("Content-disposition: attachment; filename={$file->getOriginalName()}");
+    header("Content-Type: {$file->getMimeType()}");
+
+    readfile(__DIR__ . "/{$file->getPath()}/{$file->getNewName()}");
+})->setName('dwnld');
 
 $app->run();
