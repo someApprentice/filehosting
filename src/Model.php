@@ -38,4 +38,19 @@ class Model
 
         return $newName;
     }
+
+    public static function isImage($type)
+    {
+        $imageTypes = array(
+            //'image/gif',
+            'image/jpeg',
+            'image/png'
+        );
+
+        if (in_array($type, $imageTypes)) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -8,6 +8,10 @@
 
     <h2><?= $file->getOriginalName() ?></h2>
 
+    <?php if (App\Model::isImage($file->getMimeType())) : ?>
+        <img src="/<?= $file->getThumbnail() ?>">
+    <?php endif; ?>
+
     <ul>
         <li>Size: <?= $file->getSize() ?></li>
         <li>Type: <?= $file->getMimeType() ?></li>

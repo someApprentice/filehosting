@@ -24,6 +24,9 @@ class File
     /** @Column(type="string") **/
     protected $mimetype;
 
+    /** @Column(type="string", nullable=true) **/
+    protected $thumbnail;
+
     public function getId()
     {
         return $this->id;
@@ -84,6 +87,18 @@ class File
     public function setMimeType($mimetype)
     {
         $this->mimetype = $mimetype;
+
+        return $this;
+    }
+
+    public function getThumbnail()
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail($thumbnail)
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

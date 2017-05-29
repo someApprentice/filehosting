@@ -58,6 +58,41 @@ $app->post('/', function ($request, $response) {
         $file->setPath($path);
         $file->setMimeType($mimetype);
 
+        if (Model::isImage($mimetype)) {
+            $thumbnailWidth = 640;
+            $thumbnailHeight = 480;
+
+            list($width, $height) = getimagesize(__DIR__ . "/$path/$newName");
+
+            if ($width > $height) {
+                $newWidth = $thumbnailWidth;
+                $newHeight = $height * $newWidth / $width;
+            } else {
+                $newHeight = $thumbnailHeight;
+                $newWidth  = $width * $newHeight / $height;
+            }
+
+            $thumbnail = imagecreatetruecolor($newWidth, $newHeight);
+
+            switch ($mimetype) {
+                case 'image/jpeg':
+                    $image = imagecreatefromjpeg(__DIR__. "/$path/$newName");
+                    imagecopyresampled($thumbnail, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+                    imagejpeg($thumbnail, __DIR__ . "/$path/thumb_$newName");
+                break;
+
+                case 'image/png':
+                    $image = imagecreatefrompng(__DIR__. "/$path/$newName");
+                    imagecopyresampled($thumbnail, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+                    imagepng($thumbnail, __DIR__ . "/$path/thumb_$newName");
+                break;
+            }
+
+            $file->setThumbnail("$path/thumb_$newName");
+        }
+
         $em->persist($file);
         $em->flush();
 
