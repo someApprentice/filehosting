@@ -3,21 +3,10 @@ namespace App;
 
 class Model
 {
-    public static function generateRandomString($length)
-    {
-        $string = '';
-        $characters =  '0123456789abcdefghijklmnopqrstuvwxyz';
-
-        for ($i = 0; $i < $length; $i++) {
-            $string .= $characters[mt_rand(0, strlen($characters) - 1)];
-        }
-
-        return $string;
-    }
 
     public static function generatePath()
     {
-        $path = "files/" . Model::generateRandomString(4);
+        $path = "files/" . mb_substr(uniqid(), 9);
 
         mkdir($path);
 
@@ -27,7 +16,7 @@ class Model
     public static function generateNewNameForFile($file)
     {
         $originalName = $file->getClientFileName();
-        $newName = Model::generateRandomString(8);
+        $newName = uniqid();
 
         $matches = array();
 
