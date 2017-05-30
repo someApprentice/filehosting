@@ -6,9 +6,7 @@ class Model
 
     public static function generatePath()
     {
-        $path = "files/" . mb_substr(uniqid(), 9);
-
-        mkdir($path);
+        $path = mb_substr(uniqid(), 9);
 
         return $path;
     }

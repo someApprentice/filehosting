@@ -49,20 +49,24 @@ $app->post('/', function ($request, $response) {
         $path = Model::generatePath();
         $mimetype = $file->getClientMediaType();
 
-        $file->moveTo(__DIR__ . "/$path/$newName");
+        mkdir("files/$path");
+
+        $file->moveTo(__DIR__ . "/files/$path/$newName");
 
         $file = new File();
         $file->setOriginalName($originalName);
         $file->setNewName($newName);
         $file->setSize($size);
-        $file->setPath($path);
+        $file->setPath("files/$path");
         $file->setMimeType($mimetype);
 
         if (Model::isImage($mimetype)) {
+            mkdir("thumbnails/$path");
+
             $thumbnailWidth = 640;
             $thumbnailHeight = 480;
 
-            list($width, $height) = getimagesize(__DIR__ . "/$path/$newName");
+            list($width, $height) = getimagesize(__DIR__ . "/files/$path/$newName");
 
             if ($width > $height) {
                 $newWidth = $thumbnailWidth;
@@ -76,21 +80,21 @@ $app->post('/', function ($request, $response) {
 
             switch ($mimetype) {
                 case 'image/jpeg':
-                    $image = imagecreatefromjpeg(__DIR__. "/$path/$newName");
+                    $image = imagecreatefromjpeg(__DIR__. "/files/$path/$newName");
                     imagecopyresampled($thumbnail, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
-                    imagejpeg($thumbnail, __DIR__ . "/$path/thumb_$newName");
+                    imagejpeg($thumbnail, __DIR__ . "/thumbnails/$path/$newName");
                 break;
 
                 case 'image/png':
-                    $image = imagecreatefrompng(__DIR__. "/$path/$newName");
+                    $image = imagecreatefrompng(__DIR__. "/files/$path/$newName");
                     imagecopyresampled($thumbnail, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
-                    imagepng($thumbnail, __DIR__ . "/$path/thumb_$newName");
+                    imagepng($thumbnail, __DIR__ . "/thumbnails/$path/thumb_$newName");
                 break;
             }
 
-            $file->setThumbnail("$path/thumb_$newName");
+            $file->setThumbnail("thumbnails/$path/$newName");
         }
 
         $em->persist($file);
