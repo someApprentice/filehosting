@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../vendor/autoload.php');
+require_once(__DIR__ . '/../vendor/james-heinrich/getid3/getid3/getid3.php');
 
 use Slim\Container;
 
@@ -38,6 +39,10 @@ $container['View'] = function ($c) {
 
 $container['csrf'] = function ($c) {
     return new Csrf;
+};
+
+$container['getID3'] = function ($c) {
+    return new getID3;
 };
 
 

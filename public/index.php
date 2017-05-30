@@ -38,6 +38,8 @@ $app->get('/', function ($request, $response) {
 $app->post('/', function ($request, $response) {
     $em = $this->get('EntityManager');
 
+    $getID3  = $this->get('getID3');
+
     $file = $request->getUploadedFiles()['file'];
 
     $error = $file->getError();
@@ -53,12 +55,15 @@ $app->post('/', function ($request, $response) {
 
         $file->moveTo(__DIR__ . "/files/$path/$newName");
 
+        $info = $getID3->analyze(__DIR__ . "/files/$path/$newName");
+
         $file = new File();
         $file->setOriginalName($originalName);
         $file->setNewName($newName);
         $file->setSize($size);
         $file->setPath("files/$path");
         $file->setMimeType($mimetype);
+        $file->setInfo($info);
 
         if (Model::isImage($mimetype)) {
             $image = new \Imagick(__DIR__ . "/files/$path/$newName");
@@ -98,7 +103,7 @@ $app->get('/download/{id}', function ($request, $response, $args) {
     $em = $this->get('EntityManager');
 
     $file = $em->getRepository('App\Entity\File')->find($args['id']);
-
+    
     return $this->get('View')->render($response, 'download.phtml', [
         'router' => $this->get('router'),
         'file' => $file

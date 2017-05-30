@@ -27,6 +27,9 @@ class File
     /** @Column(type="string", nullable=true) **/
     protected $thumbnail;
 
+    /** @Column(type="json_array") **/
+    protected $info;
+
     public function getId()
     {
         return $this->id;
@@ -99,6 +102,18 @@ class File
     public function setThumbnail($thumbnail)
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getInfo()
+    {
+        return $this->info;
+    }
+
+    public function setInfo($info)
+    {
+        $this->info = $info;
 
         return $this;
     }
