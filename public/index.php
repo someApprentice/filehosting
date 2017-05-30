@@ -61,37 +61,23 @@ $app->post('/', function ($request, $response) {
         $file->setMimeType($mimetype);
 
         if (Model::isImage($mimetype)) {
+            $image = new \Imagick(__DIR__ . "/files/$path/$newName");
+
             mkdir("thumbnails/$path");
 
-            $thumbnailWidth = 640;
-            $thumbnailHeight = 480;
+            if ($mimetype == 'image/gif') {
+                $image = $image->coalesceImages();
 
-            list($width, $height) = getimagesize(__DIR__ . "/files/$path/$newName");
+                foreach ($image as $frame) {
+                    $frame->thumbnailImage(540, 0);
+                }
 
-            if ($width > $height) {
-                $newWidth = $thumbnailWidth;
-                $newHeight = $height * $newWidth / $width;
+                $image = $image->deconstructImages();
+                $image->writeImages(__DIR__ . "/thumbnails/$path/$newName", true);
             } else {
-                $newHeight = $thumbnailHeight;
-                $newWidth  = $width * $newHeight / $height;
-            }
+                $frame->thumbnailImage(540, 0);
 
-            $thumbnail = imagecreatetruecolor($newWidth, $newHeight);
-
-            switch ($mimetype) {
-                case 'image/jpeg':
-                    $image = imagecreatefromjpeg(__DIR__. "/files/$path/$newName");
-                    imagecopyresampled($thumbnail, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-                    imagejpeg($thumbnail, __DIR__ . "/thumbnails/$path/$newName");
-                break;
-
-                case 'image/png':
-                    $image = imagecreatefrompng(__DIR__. "/files/$path/$newName");
-                    imagecopyresampled($thumbnail, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-                    imagepng($thumbnail, __DIR__ . "/thumbnails/$path/thumb_$newName");
-                break;
+                $image->writeImage(__DIR__ . "/thumbnails/$path/$newName");
             }
 
             $file->setThumbnail("thumbnails/$path/$newName");

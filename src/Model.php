@@ -40,9 +40,10 @@ class Model
     public static function isImage($type)
     {
         $imageTypes = array(
-            //'image/gif',
+            'image/gif',
             'image/jpeg',
-            'image/png'
+            'image/png',
+            'image/bmp'
         );
 
         if (in_array($type, $imageTypes)) {

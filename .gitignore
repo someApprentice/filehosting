@@ -3,5 +3,7 @@ composer.lock
 /vendor/
 
 !/public/files/.gitkeep
+!/public/thumbnails/.gitkeep
 
 /public/files/**
+/public/thumbnails/**
