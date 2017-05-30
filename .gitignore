@@ -2,8 +2,8 @@ composer.phar
 composer.lock
 /vendor/
 
-!/public/files/.gitkeep
+/public/files/**
 !/public/thumbnails/.gitkeep
 
-/public/files/**
 /public/thumbnails/**
+!/public/thumbnails/.gitkeep
