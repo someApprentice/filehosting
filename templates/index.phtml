@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>filehosting</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
 </head>
 <body>
     <h1>filehosting</h1>
@@ -11,12 +12,18 @@
         <input type="submit" name="submit">
 
         <?php if (isset($error) and $error != 0) : ?>
-            <span>Error</span>
+            <span><?php var_dump($error) ?></span>
         <?php endif; ?>
 
         <input type="hidden" name="<?= $csrfNameKey ?>" value="<?= $csrfName ?>">
         <input type="hidden" name="<?= $csrfValueKey ?>" value="<?= $csrfValue ?>">
     </form>
+
+    <div class="dropzone">
+        <p>Drop here</p>
+    </div>
+
+    <progress value="0" max="100"></progress>
 
     <ul>
         <?php foreach ($files as $file) : ?>
@@ -27,5 +34,7 @@
             </li>
         <?php endforeach; ?>
     </ul>
+
+    <script type="text/javascript" src="/js/script.js"></script>
 </body>
 </html>

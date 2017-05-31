@@ -1,0 +1,20 @@
+.dropzone {
+    display: none;
+    border: dashed 1px grey;
+    margin: 5px 0;
+    width:225px;
+    height: 75px;
+
+    text-align: center;
+}
+
+.dropzone p {
+    display: block;
+    margin: 0 auto;
+    padding: 25px 0; 
+}
+
+progress {
+    display: none;
+    width:225px;
+}
