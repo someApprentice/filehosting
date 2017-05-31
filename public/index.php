@@ -66,24 +66,9 @@ $app->post('/', function ($request, $response) {
         $file->setInfo($info);
 
         if (Model::isImage($mimetype)) {
-            $image = new \Imagick(__DIR__ . "/files/$path/$newName");
-
             mkdir("thumbnails/$path");
 
-            if ($mimetype == 'image/gif') {
-                $image = $image->coalesceImages();
-
-                foreach ($image as $frame) {
-                    $frame->thumbnailImage(540, 0);
-                }
-
-                $image = $image->deconstructImages();
-                $image->writeImages(__DIR__ . "/thumbnails/$path/$newName", true);
-            } else {
-                $frame->thumbnailImage(540, 0);
-
-                $image->writeImage(__DIR__ . "/thumbnails/$path/$newName");
-            }
+            Model::generateThumbnail("files/$path/$newName");
 
             $file->setThumbnail("thumbnails/$path/$newName");
         }

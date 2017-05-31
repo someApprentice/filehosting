@@ -37,6 +37,29 @@ class Model
         return $newName;
     }
 
+    public static function generateThumbnail($path)
+    {
+        $image = new \Imagick(__DIR__ . "/../public/$path");
+
+        $thumbnailPath = preg_replace('/^files/', 'thumbnails', $path);
+
+        if ($image->getImageFormat() == 'GIF') {
+            $image = $image->coalesceImages();
+
+            foreach ($image as $frame) {
+                $frame->thumbnailImage(540, 0);
+            }
+
+            $image = $image->deconstructImages();
+            $image->writeImages(__DIR__ . "/../public/$thumbnailPath", true);
+        } else {
+            $image->thumbnailImage(540, 0);
+
+            $image->writeImage(__DIR__ . "/../public/$thumbnailPath");
+        }
+
+    }
+
     public static function isImage($type)
     {
         $imageTypes = array(
