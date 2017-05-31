@@ -75,4 +75,34 @@ class Model
 
         return false;
     }
+
+    public static function isAudio($type)
+    {
+        $audioTypes = array(
+            'audio/mpeg',
+            'audio/ogg',
+            'audio/wav'
+        );
+
+        if (in_array($type, $audioTypes)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function isVideo($type)
+    {
+        $audioTypes = array(
+            'video/mp4',
+            'video/webm',
+            'video/ogg'
+        );
+
+        if (in_array($type, $audioTypes)) {
+            return true;
+        }
+
+        return false;
+    }
 }

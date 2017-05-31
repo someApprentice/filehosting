@@ -12,6 +12,14 @@
         <img src="/<?= $file->getThumbnail() ?>">
     <?php endif; ?>
 
+    <?php if (App\Model::isAudio($file->getMimeType())) : ?>
+        <audio src="/<?= $file->getPath() ?>/<?=$file->getNewName() ?>" controls></audio>
+    <?php endif; ?>    
+
+    <?php if (App\Model::isVideo($file->getMimeType())) : ?>
+        <video src="/<?= $file->getPath() ?>/<?=$file->getNewName() ?>" controls></video>
+    <?php endif; ?>
+
     <ul>
         <li>Size: <?= $file->getSize() ?></li>
         <li>Type: <?= $file->getMimeType() ?></li>
@@ -24,5 +32,3 @@
     </a>
 </body>
 </html>
-
-<!-- {"GETID3_VERSION":"1.9.14-201703261440","filesize":801387,"filepath":"\/var\/www\/filehosting\/public\/files\/2978","filename":"592d3a5f228e7.gif","filenamepath":"\/var\/www\/filehosting\/public\/files\/2978\/592d3a5f228e7.gif","avdataoffset":0,"avdataend":801387,"fileformat":"gif","video":{"dataformat":"gif","lossless":true,"pixel_aspect_ratio":1,"resolution_x":500,"resolution_y":333,"bits_per_sample":6,"compression_ratio":6.4175135135135},"encoding":"UTF-8","mime_type":"image\/gif","gif":{"header":{"raw":{"identifier":"GIF","version":"89a","width":500,"height":333,"flags":245,"bg_color_index":0,"aspect_ratio":0},"flags":{"global_color_table":true,"global_color_sorted":true},"bits_per_pixel":24,"global_color_size":64},"version":"89a"}} -->
