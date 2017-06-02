@@ -123,14 +123,14 @@ $app->get('/search', function($request, $response, $args) {
     $rt_query = $pdo->prepare("SELECT * FROM rt_files WHERE MATCH (:search) ORDER BY id DESC");
     $rt_query->bindValue(':search', $q);
     $rt_query->execute();
-    $rt_results = $query->fetchAll();
+    $rt_results = $rt_query->fetchAll();
 
     $index_query = $pdo->prepare("SELECT * FROM index_files WHERE MATCH (:search) ORDER BY id DESC");
     $index_query->bindValue(':search', $q);
     $index_query->execute();
-    $index_results = $query->fetchAll();
+    $index_results = $index_query->fetchAll();
 
-    $results = array_merge($rt_results, $rt_query);
+    $results = array_merge($rt_results, $index_results);
 
     foreach ($results as $result) {
         $files[] = $em->getRepository('App\Entity\File')->find($result['id']);
