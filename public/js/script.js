@@ -2,7 +2,7 @@
     var dropzone = document.querySelector('.dropzone');
     var progressbar = document.querySelector('progress');
     var form = document.querySelector('form');
-    var csrf = document.querySelectorAll('input[type="hidden"]');
+    var csrf = document.querySelectorAll('form[action="/"] input[type="hidden"]');
 
     form.style.display = 'none';
     dropzone.style.display = 'block';

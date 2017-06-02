@@ -33,6 +33,13 @@ $container['EntityManager'] = function ($c) {
     return $entityManager;
 };
 
+$container['SphinxConnection'] = function ($c) {    
+    $pdo = new \PDO('mysql:host=127.0.0.1;port=9306');
+    $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+    return $pdo;
+};
+
 $container['View'] = function ($c) {
     return new View(__DIR__ . '/../templates');
 };

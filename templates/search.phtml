@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>filehosting</title>
+</head>
+<body>
+    <h1>filehosting</h1>
+
+    <form method="get" action="/search">
+        <input type="text" name="q" value="<?= $q ?>">
+        <input type="submit">
+    </form>
+
+    <ul>
+        <?php foreach ($files as $file) : ?>
+            <li>
+                <a href="<?= $router->pathFor('download', ['id' => $file->getId()])?>">
+                    <?= $file->getOriginalName() ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</body>
+</html>
