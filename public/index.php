@@ -120,20 +120,15 @@ $app->get('/search', function($request, $response, $args) {
 
     $files = array();
 
-    $rt_query = $pdo->prepare("SELECT * FROM rt_files WHERE MATCH (:search) ORDER BY id DESC");
-    $rt_query->bindValue(':search', $q);
-    $rt_query->execute();
-    $rt_results = $rt_query->fetchAll();
+    if (!empty($q)) {
+        $query = $pdo->prepare("SELECT * FROM rt_files, index_files WHERE MATCH (:search) ORDER BY id DESC");
+        $query->bindValue(':search', $q);
+        $query->execute();
+        $results = $query->fetchAll();
 
-    $index_query = $pdo->prepare("SELECT * FROM index_files WHERE MATCH (:search) ORDER BY id DESC");
-    $index_query->bindValue(':search', $q);
-    $index_query->execute();
-    $index_results = $index_query->fetchAll();
-
-    $results = array_merge($rt_results, $index_results);
-
-    foreach ($results as $result) {
-        $files[] = $em->getRepository('App\Entity\File')->find($result['id']);
+        foreach ($results as $result) {
+            $files[] = $em->getRepository('App\Entity\File')->find($result['id']);
+        }      
     }
 
     return $this->get('View')->render($response, 'search.phtml', [
@@ -141,6 +136,39 @@ $app->get('/search', function($request, $response, $args) {
         'q' => $q,
         'files' => $files
     ]);
+});
+
+$app->get('/suggest', function($request, $response, $args) {
+    $pdo = $this->get('SphinxConnection');
+
+    $array = array();
+
+    $q = (isset($request->getQueryParams()['term'])) ? $request->getQueryParams()['term'] : '';
+
+    $aq = explode(' ',$q);
+    if(strlen($aq[count($aq)-1])<3){
+        $q = $q;
+    }else{
+        $q = $q.'*';
+    }
+
+    $query = $pdo->prepare("SELECT * FROM filescomplete WHERE MATCH (:search) ORDER BY id DESC");
+    $query->bindValue(':search', $q);
+    $query->execute();
+    $results = $query->fetchAll();
+    
+    $unique_results = array();
+
+    foreach ($results as $result) {
+        if (!in_array($result['originalname'], $array)) {
+            $array[] = $result['originalname'];
+            $unique_results[] = array('label' => $result['originalname']);
+        }
+    }
+
+    echo json_encode($unique_results);
+
+    die();
 });
 
 $app->run();
