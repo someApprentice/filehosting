@@ -1,19 +1,15 @@
 (function(){
     var dropzone = document.querySelector('.dropzone');
     var progressbar = document.querySelector('progress');
-    var form = document.querySelector('form');
+    var form = document.querySelector('form[action="/"]');
     var csrf = document.querySelectorAll('form[action="/"] input[type="hidden"]');
 
     form.style.display = 'none';
     dropzone.style.display = 'block';
 
-    dropzone.ondrop = function(e) {
-        e.preventDefault();
-
+    function upload(files) {
         var formdata = new FormData();
         var xhr = new XMLHttpRequest();
-
-        var files = e.dataTransfer.files;
 
         formdata.append('file', files[0]);
 
@@ -25,7 +21,7 @@
             dropzone.style.display = 'none';
             progressbar.style.display = 'inline';
 
-            var percent = Math.round(e.total / e.loaded * 100);
+            var percent = Math.round(e.loaded / e.total * 100);
 
             progressbar.value = percent;
         };
@@ -36,6 +32,14 @@
 
         xhr.open('post', '/');
         xhr.send(formdata);
+    }
+
+    dropzone.ondrop = function(e) {
+        e.preventDefault();
+
+        var files = e.dataTransfer.files;
+
+        upload(files);
 
         this.style.borderColor = 'grey';
         this.style.boxShadow = 'inset 0 0 5px grey';
@@ -51,5 +55,17 @@
         this.style.borderColor = 'grey';
 
         return false;
+    }
+
+    dropzone.onclick = function() {
+        var input = document.querySelector('input[name="file"]');
+
+        input.click();
+        
+        input.onchange = function() {
+            var files = input.files;
+
+            upload(files);
+        }
     }
 }());
