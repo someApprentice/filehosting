@@ -1,71 +1,71 @@
-(function(){
-    var dropzone = document.querySelector('.dropzone');
-    var progressbar = document.querySelector('progress');
-    var form = document.querySelector('form[action="/"]');
-    var csrf = document.querySelectorAll('form[action="/"] input[type="hidden"]');
-
-    form.style.display = 'none';
-    dropzone.style.display = 'block';
+$(document).ready(function() {
+    $('form[action="/"]').css('display', 'none');
+    $('.dropzone').css('display', 'block');
 
     function upload(files) {
         var formdata = new FormData();
-        var xhr = new XMLHttpRequest();
 
         formdata.append('file', files[0]);
 
-        for(var i = 0; i < csrf.length; i++) {
-            formdata.append(csrf[i].name, csrf[i].value);
-        }
+        $.each($('form[action="/"] input[type="hidden"]'), function(i, csrf) {
+            formdata.append($(csrf).attr('name'), $(csrf).attr('value'));
+        });
 
-        xhr.upload.onprogress = function(e) {
-            dropzone.style.display = 'none';
-            progressbar.style.display = 'inline';
+        $.ajax({
+            url: '/',
+            method: 'post',
+            data: formdata,
+            contentType: false,
+            processData: false,
 
-            var percent = Math.round(e.loaded / e.total * 100);
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
 
-            progressbar.value = percent;
-        };
+                xhr.upload.onprogress = function(e) {
+                    $('.dropzone').css('display', 'none');
+                    $('progress').css('display', 'inline');
 
-        xhr.onload = function() {
-            window.location.replace('/');
-        };
+                    var percent = Math.round(e.loaded / e.total * 100);
 
-        xhr.open('post', '/');
-        xhr.send(formdata);
+                    $('progress').attr('value', percent);
+                };
+
+                return xhr;
+            },
+
+            success: function(data) {
+                window.location.replace('/');
+            }
+        });
     }
 
-    dropzone.ondrop = function(e) {
+    $('.dropzone').on('drop', function(e) {
         e.preventDefault();
 
-        var files = e.dataTransfer.files;
+        var files = e.originalEvent.dataTransfer.files;
 
         upload(files);
 
-        this.style.borderColor = 'grey';
-        this.style.boxShadow = 'inset 0 0 5px grey';
-    }
+        $(this).css({'border-color':'grey', 'box-shadow':'inset 0 0 5px grey'});
+    });
 
-    dropzone.ondragover = function() {
-        this.style.borderColor = 'black';
-
-        return false;
-    }
-
-    dropzone.ondragleave = function() {
-        this.style.borderColor = 'grey';
+    $('.dropzone').on('dragover', function() {
+        $(this).css('border-color', 'black');
 
         return false;
-    }
+    });
 
-    dropzone.onclick = function() {
-        var input = document.querySelector('input[name="file"]');
+    $('.dropzone').on('dragleave', function() {
+        $(this).css('border-color', 'grey');
 
-        input.click();
+        return false;
+    });
+
+    $('.dropzone').on('click', function() {
+        $('input[name="file"]').click();
         
-        input.onchange = function() {
-            var files = input.files;
-
-            upload(files);
-        }
-    }
-}());
+        $('input[name="file"]').on('change', function() {
+            upload($('input[name="file"]').prop('files'));
+        });
+    });
+});
