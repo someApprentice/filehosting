@@ -62,7 +62,7 @@ $app->post('/', function ($request, $response) {
         $file->setSize($size);
         $file->setPath("files/$path");
         $file->setMimeType($mimetype);
-        $file->setInfo($info);
+        $file->setInfo(json_encode($info, JSON_UNESCAPED_UNICODE));
 
         if (Model::isImage($mimetype)) {
             mkdir("thumbnails/$path");
