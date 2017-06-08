@@ -2,20 +2,14 @@
     display: none;
     border: dashed 1px grey;
     margin: 15px 0;
+    padding: 25px 0;
     width:225px;
-    height: 75px;
 
     text-align: center;
 }
 
 .dropzone:hover {
     box-shadow: inset 0 0 5px grey;
-}
-
-.dropzone p {
-    display: block;
-    margin: 0 auto;
-    padding: 25px 0; 
 }
 
 progress {
