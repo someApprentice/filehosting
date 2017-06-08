@@ -1,11 +1,12 @@
 <?php
 require_once(__DIR__ . '/../src/init.php');
 
-use Slim\App; 
+use Slim\App;
 
 use App\Model;
 
 use App\Entity\File;
+use App\Entity\Comment;
 
 session_start();
 
@@ -94,12 +95,65 @@ $app->get('/download/{id}', function ($request, $response, $args) {
     $em = $this->get('EntityManager');
 
     $file = $em->getRepository('App\Entity\File')->find($args['id']);
+
+    $csrfNameKey = $this->csrf->getTokenNameKey();
+    $csrfValueKey = $this->csrf->getTokenValueKey();
+    $csrfName = $request->getAttribute($csrfNameKey);
+    $csrfValue = $request->getAttribute($csrfValueKey);
     
     return $this->get('View')->render($response, 'download.phtml', [
         'router' => $this->get('router'),
-        'file' => $file
+        'file' => $file,
+
+        'csrfNameKey' => $csrfNameKey,
+        'csrfValueKey' => $csrfValueKey,
+        'csrfName' => $csrfName,
+        'csrfValue' => $csrfValue
     ]);
-})->setName('download');
+})->add($container->get('csrf'))->setName('download');
+
+//comment
+$app->post('/download/{id}', function ($request, $response, $args) {
+    $em = $this->get('EntityManager');
+
+    $post = $request->getParsedBody();
+
+    $post['author'] = (isset($post['author']) and is_scalar($post['author'])) ? $post['author'] : '';
+    $post['content'] = (isset($post['content']) and is_scalar($post['content'])) ? $post['content'] : '';
+
+    $file = $em->getRepository('App\Entity\File')->find($args['id']);
+
+    $comment = new Comment();
+    $comment->setFile($file);
+    $comment->setAuthor($post['author']);
+    $comment->setContent($post['content']);
+    $comment->setDate();
+
+    $em->persist($comment);
+    $em->flush();
+
+    $comment->setTree("{$file->getId()}.{$comment->getId()}");
+
+    if (isset($post['parent']) and is_numeric($post['parent'])) {
+        $parent = $em->getRepository('App\Entity\Comment')->findOneBy(['id' => $post['parent'],'file' => $file->getId()]);
+
+        if ($parent) {
+            $tree = $parent->getTree();
+
+            $tree .= ".{$comment->getId()}";
+
+            $comment->setTree($tree);
+            $comment->setDepth($parent->getDepth() + 1);
+        } else {
+            throw new \Exception("No such parent");
+        }
+    }
+
+    $em->persist($comment);
+    $em->flush();    
+
+    return $response->withHeader('Location', "/download/{$file->getId()}");
+})->add($container->get('csrf'));
 
 $app->get('/dwnld/{id}', function($request, $response, $args) {
     $em = $this->get('EntityManager');

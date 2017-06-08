@@ -30,6 +30,9 @@ class File
     /** @Column(type="json_array") **/
     protected $info;
 
+    /** @OneToMany(targetEntity="App\Entity\Comment", mappedBy="file") @OrderBy({"tree" = "ASC", "date" = "ASC"})**/
+    protected $comments;
+
     public function getId()
     {
         return $this->id;
@@ -116,5 +119,10 @@ class File
         $this->info = $info;
 
         return $this;
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
     }
 }

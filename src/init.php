@@ -5,10 +5,15 @@ require_once(__DIR__ . '/../vendor/james-heinrich/getid3/getid3/getid3.php');
 use Slim\Container;
 
 use Doctrine\ORM\Tools\Setup;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 
 use Slim\Views\PhpRenderer as View;
 use Slim\Csrf\Guard as Csrf;
+
+use App\Types\Ltree;
+
+Type::addType('ltree', 'App\Types\Ltree');
 
 $config = [
     'settings' => [
@@ -29,6 +34,8 @@ $container['EntityManager'] = function ($c) {
 
     $metaConfig = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
     $entityManager = EntityManager::create($config, $metaConfig);
+
+    $entityManager->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('ltree', 'ltree');
 
     return $entityManager;
 };

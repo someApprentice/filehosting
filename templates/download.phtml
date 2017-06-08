@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Download</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
 </head>
 <body>
     <h1>filehosting</h1>
@@ -30,5 +31,40 @@
     <a href="<?= $router->pathFor('dwnld', ['id' => $file->getId()]) ?>">
         Download <?= $file->getOriginalName() ?>
     </a>
+
+    <hr>
+
+    <div class="comments">
+        <form method="POST" action="<?= $router->pathFor('download', ['id' => $file->getId()])?>">
+            <input type="text" name="author">
+            <textarea name="content"></textarea>
+
+            <input type="submit">
+
+            <input type="hidden" name="<?= $csrfNameKey ?>" value="<?= $csrfName ?>">
+            <input type="hidden" name="<?= $csrfValueKey ?>" value="<?= $csrfValue ?>">
+        </form>
+
+        <?php foreach($file->getComments() as $comment) : ?>
+            <div class="comment" style="margin-left:<?= $comment->getDepth() * 20?>px">
+                <b><?= $comment->getAuthor() ?></b> <span class="date"><?= $comment->getDate()->format('Y-m-d H:i:s'); ?></span>
+                <div class="content">
+                    <?= $comment->getContent() ?>
+                </div>
+
+                <form method="POST" action="<?= $router->pathFor('download', ['id' => $file->getId()])?>" style="margin-left:<?= ($comment->getDepth() + 1) * 20 ?>px">
+                    <input type="hidden" name="parent" value="<?= $comment->getId() ?>">
+
+                    <input type="text" name="author">
+                    <textarea name="content"></textarea>
+
+                    <input type="submit">
+
+                    <input type="hidden" name="<?= $csrfNameKey ?>" value="<?= $csrfName ?>">
+                    <input type="hidden" name="<?= $csrfValueKey ?>" value="<?= $csrfValue ?>">
+                </form>
+            </div>
+        <?php endforeach; ?>    
+    </div>
 </body>
 </html>
