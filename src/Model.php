@@ -3,6 +3,8 @@ namespace App;
 
 class Model
 {
+    const FILE_UPLOAD_OK = 0;
+
     public static function generatePathFor(string $newname)
     {
         $path = mb_substr(uniqid(), 9);

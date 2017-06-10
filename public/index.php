@@ -43,7 +43,7 @@ $app->post('/', function ($request, $response) {
 
     $error = $file->getError();
 
-    if ($error == 0) {
+    if ($error == Model::FILE_UPLOAD_OK) {
         $originalName = $file->getClientFilename();
         $newName = Model::generateNewName($file);
         $size = $file->getSize();
