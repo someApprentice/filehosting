@@ -14,6 +14,10 @@ use Slim\Csrf\Guard as Csrf;
 
 use App\Types\Ltree;
 
+use App\Controller\IndexController;
+use App\Controller\DownloadController;
+use App\Controller\SearchController;
+
 Type::addType('ltree', 'App\Types\Ltree');
 
 $config = [
@@ -63,6 +67,18 @@ $container['csrf'] = function ($c) {
 
 $container['getID3'] = function ($c) {
     return new getID3;
+};
+
+$container['IndexController'] = function($c) {
+    return new IndexController($c['EntityManager'], $c['SphinxConnection'], $c['getID3'], $c['csrf'], $c['View']);
+};
+
+$container['DownloadController'] = function($c) {
+    return new DownloadController($c['EntityManager'], $c['csrf'], $c['View']);
+};
+
+$container['SearchController'] = function($c) {
+    return new SearchController($c['EntityManager'], $c['SphinxConnection'], $c['View']);
 };
 
 $container['errorHandler'] = function ($c) {
