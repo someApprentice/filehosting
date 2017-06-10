@@ -87,8 +87,12 @@ form[action="/search"] > input[type="text"] {
     color: grey;
 }
 
-.comments .content {
+.comment .content {
     margin: 5px 0;
+}
+
+.comment .reply {
+    font-size: 12px;
 }
 
 .four-hundred-four {
