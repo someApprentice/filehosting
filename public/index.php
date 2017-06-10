@@ -47,7 +47,7 @@ $app->post('/', function ($request, $response) {
         $originalName = $file->getClientFilename();
         $newName = Model::generateNewNameForFile($file);
         $size = $file->getSize();
-        $path = Model::generatePath();
+        $path = Model::generatePathFor($newName);
         $mimetype = $file->getClientMediaType();
 
         mkdir("files/$path");

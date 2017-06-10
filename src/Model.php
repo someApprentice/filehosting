@@ -3,15 +3,18 @@ namespace App;
 
 class Model
 {
-
-    public static function generatePath()
+    public static function generatePathFor(string $newname)
     {
         $path = mb_substr(uniqid(), 9);
+
+        if (file_exists(__DIR__ . "/../public/files/$path/$newname")) {
+            $path = self::generatePathForFile($file);
+        }
 
         return $path;
     }
 
-    public static function generateNewNameForFile($file)
+    public static function generateNewName($file)
     {
         $originalName = $file->getClientFileName();
         $newName = uniqid();
