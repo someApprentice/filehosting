@@ -16,6 +16,7 @@
     {% endif %}
 
     <ul class="list-unstyled files">
+        <li>Date: {{ file.getDate().format('Y-m-d H:i:s') }}</li>
         <li>Size: {{ file.getSize() }}</li>
         <li>Type: {{ file.getMimeType() }}</li>
 

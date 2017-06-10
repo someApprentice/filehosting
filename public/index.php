@@ -59,6 +59,7 @@ $app->post('/', function ($request, $response) {
         $file = new File();
         $file->setOriginalName($originalName);
         $file->setNewName($newName);
+        $file->setDate();
         $file->setSize($size);
         $file->setPath("files/$path");
         $file->setMimeType($mimetype);

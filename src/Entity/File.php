@@ -15,6 +15,9 @@ class File
     /** @Column(type="string") **/
     protected $newname;
 
+    /** @Column(type="datetime") **/
+    protected $date;
+
     /** @Column(type="integer") **/
     protected $size;
 
@@ -57,6 +60,18 @@ class File
     public function setNewName(string $newname)
     {
         $this->newname = $newname;
+
+        return $this;
+    }
+
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    public function setDate()
+    {
+        $this->date = new \Datetime("now");
 
         return $this;
     }
