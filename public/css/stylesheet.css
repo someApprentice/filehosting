@@ -90,3 +90,7 @@ form[action="/search"] > input[type="text"] {
 .comments .content {
     margin: 5px 0;
 }
+
+.four-hundred-four {
+    text-align: center;
+}

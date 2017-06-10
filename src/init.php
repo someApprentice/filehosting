@@ -65,18 +65,14 @@ $container['getID3'] = function ($c) {
     return new getID3;
 };
 
-
-//for future implemetation
 $container['errorHandler'] = function ($c) {
     return function ($request, $response, $exception) use ($c) {
-        return $c['response']->withStatus(500)
-                             ->withHeader('Content-Type', 'text/html')
-                             ->write('Something went wrong!');
+        return $c->get('View')->render($response, 'error.html', [])->withStatus(500);
     };
 };
 
 $container['notFoundHandler'] = function ($c) {
     return function ($requset, $responce) use ($c) {
-        return $c['response']->withStatus(404)->withHeader('Content-Type', 'text-html')->write('Page not found');
+        return $c->get('View')->render($responce, '404.html', [])->withStatus(404);
     };
 };
