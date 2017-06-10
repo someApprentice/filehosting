@@ -1,6 +1,8 @@
 <?php
 namespace App;
 
+use App\Entity\File;
+
 class Model
 {
     const FILE_UPLOAD_OK = 0;
@@ -42,11 +44,11 @@ class Model
         return $newName;
     }
 
-    public static function generateThumbnail(string $path)
+    public static function generateThumbnail(File $file)
     {
-        $image = new \Imagick(__DIR__ . "/../public/$path");
+        $image = new \Imagick(__DIR__ . "/../public/{$file->getPath()}/{$file->getNewName()}");
 
-        $thumbnailPath = preg_replace('/^files/', 'thumbnails', $path);
+        $thumbnailPath = $file->getThumbnail();
 
         if ($image->getImageFormat() == 'GIF') {
             $image = $image->coalesceImages();
@@ -56,58 +58,12 @@ class Model
             }
 
             $image = $image->deconstructImages();
-            $image->writeImages(__DIR__ . "/../public/$thumbnailPath", true);
+            $image->writeImages(__DIR__ . "/../public/{$thumbnailPath}", true);
         } else {
             $image->thumbnailImage(540, 0);
 
-            $image->writeImage(__DIR__ . "/../public/$thumbnailPath");
+            $image->writeImage(__DIR__ . "/../public/{$thumbnailPath}");
         }
 
-    }
-
-    public static function isImage(string $type)
-    {
-        $imageTypes = array(
-            'image/gif',
-            'image/jpeg',
-            'image/png',
-            'image/bmp'
-        );
-
-        if (in_array($type, $imageTypes)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static function isAudio(string $type)
-    {
-        $audioTypes = array(
-            'audio/mpeg',
-            'audio/ogg',
-            'audio/wav'
-        );
-
-        if (in_array($type, $audioTypes)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static function isVideo(string $type)
-    {
-        $audioTypes = array(
-            'video/mp4',
-            'video/webm',
-            'video/ogg'
-        );
-
-        if (in_array($type, $audioTypes)) {
-            return true;
-        }
-
-        return false;
     }
 }

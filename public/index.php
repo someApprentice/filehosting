@@ -64,12 +64,12 @@ $app->post('/', function ($request, $response) {
         $file->setMimeType($mimetype);
         $file->setInfo(json_encode($info, JSON_UNESCAPED_UNICODE));
 
-        if (Model::isImage($mimetype)) {
+        if ($file->isImage($mimetype)) {
             mkdir("thumbnails/$path");
 
-            Model::generateThumbnail("files/$path/$newName");
-
             $file->setThumbnail("thumbnails/$path/$newName");
+
+            Model::generateThumbnail($file);
         }
 
         $em->persist($file);
@@ -115,7 +115,6 @@ $app->get('/download/{id}', function ($request, $response, $args) {
     
     return $this->get('View')->render($response, 'download.phtml', [
         'file' => $file,
-        'model' => new Model,
 
         'csrfNameKey' => $csrfNameKey,
         'csrfValueKey' => $csrfValueKey,

@@ -3,15 +3,15 @@
 {% block content %}
     <h2>{{ file.getOriginalName() }}</h2>
 
-    {% if model.isImage(file.getMimeType()) %}
+    {% if file.isImage() %}
         <img class="media" src="/{{ file.getThumbnail() }}">
     {% endif %}
 
-    {% if model.isAudio(file.getMimeType()) %}
+    {% if file.isAudio() %}
         <audio class="media" src="/{{ file.getPath() }}/{{ file.getNewName() }}" controls></audio>
     {% endif %}    
 
-    {% if model.isVideo(file.getMimeType()) %}
+    {% if file.isVideo() %}
         <video class="media" src="/{{ file.getPath() }}/{{ file.getNewName() }}" controls></video>
     {% endif %}
 

@@ -125,4 +125,50 @@ class File
     {
         return $this->comments;
     }
+
+    public function isImage()
+    {
+        $imageTypes = array(
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/bmp'
+        );
+
+        if (in_array($this->mimetype, $imageTypes)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isAudio()
+    {
+        $audioTypes = array(
+            'audio/mpeg',
+            'audio/ogg',
+            'audio/wav'
+        );
+
+        if (in_array($this->mimetype, $audioTypes)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isVideo()
+    {
+        $audioTypes = array(
+            'video/mp4',
+            'video/webm',
+            'video/ogg'
+        );
+
+        if (in_array($this->mimetype, $audioTypes)) {
+            return true;
+        }
+
+        return false;
+    }
 }
