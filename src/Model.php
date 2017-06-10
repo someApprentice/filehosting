@@ -40,7 +40,7 @@ class Model
         return $newName;
     }
 
-    public static function generateThumbnail($path)
+    public static function generateThumbnail(string $path)
     {
         $image = new \Imagick(__DIR__ . "/../public/$path");
 
@@ -63,7 +63,7 @@ class Model
 
     }
 
-    public static function isImage($type)
+    public static function isImage(string $type)
     {
         $imageTypes = array(
             'image/gif',
@@ -79,7 +79,7 @@ class Model
         return false;
     }
 
-    public static function isAudio($type)
+    public static function isAudio(string $type)
     {
         $audioTypes = array(
             'audio/mpeg',
@@ -94,7 +94,7 @@ class Model
         return false;
     }
 
-    public static function isVideo($type)
+    public static function isVideo(string $type)
     {
         $audioTypes = array(
             'video/mp4',

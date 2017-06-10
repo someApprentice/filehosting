@@ -43,7 +43,7 @@ class File
         return $this->originalname;
     }
 
-    public function setOriginalName($originalname)
+    public function setOriginalName(string $originalname)
     {
         $this->originalname = $originalname;
 
@@ -54,7 +54,7 @@ class File
         return $this->newname;
     }
 
-    public function setNewName($newname)
+    public function setNewName(string $newname)
     {
         $this->newname = $newname;
 
@@ -66,7 +66,7 @@ class File
         return $this->size;
     }
 
-    public function setSize($size)
+    public function setSize(int $size)
     {
         $this->size = $size;
 
@@ -78,7 +78,7 @@ class File
         return $this->path;
     }
 
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
         
@@ -90,7 +90,7 @@ class File
         return $this->mimetype;
     }
 
-    public function setMimeType($mimetype)
+    public function setMimeType(string $mimetype)
     {
         $this->mimetype = $mimetype;
 
@@ -102,7 +102,7 @@ class File
         return $this->thumbnail;
     }
 
-    public function setThumbnail($thumbnail)
+    public function setThumbnail(string $thumbnail)
     {
         $this->thumbnail = $thumbnail;
 
@@ -114,7 +114,7 @@ class File
         return $this->info;
     }
 
-    public function setInfo($info)
+    public function setInfo(string $info)
     {
         $this->info = $info;
 
