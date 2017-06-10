@@ -6,7 +6,7 @@
     },
     "require": {
         "slim/slim": "^3.0",
-        "slim/php-view": "^2.2",
+        "slim/twig-view": "^2.2",
         "doctrine/orm": "2.4.*",
         "slim/csrf": "^0.8.1",
         "james-heinrich/getid3": "^1.9"

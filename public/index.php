@@ -23,7 +23,6 @@ $app->get('/', function ($request, $response) {
     $csrfValue = $request->getAttribute($csrfValueKey);
 
     return $this->get('View')->render($response, 'index.phtml', [
-        'router' => $this->get('router'),
         'files' => $files,
 
         'csrfNameKey' => $csrfNameKey,
@@ -85,8 +84,21 @@ $app->post('/', function ($request, $response) {
 
         return $response->withHeader('Location', '/');
     } else {
+        $files = $em->getRepository('App\Entity\File')->findBy([], ['id' => 'DESC'], 100);
+
+        $csrfNameKey = $this->csrf->getTokenNameKey();
+        $csrfValueKey = $this->csrf->getTokenValueKey();
+        $csrfName = $request->getAttribute($csrfNameKey);
+        $csrfValue = $request->getAttribute($csrfValueKey);
+
         return $this->get('View')->render($response, 'index.phtml', [
-            'error' => $error
+            'files' => $files,
+            'error' => $error,
+
+            'csrfNameKey' => $csrfNameKey,
+            'csrfValueKey' => $csrfValueKey,
+            'csrfName' => $csrfName,
+            'csrfValue' => $csrfValue
         ]);
     }
 })->add($container->get('csrf'));
@@ -102,8 +114,8 @@ $app->get('/download/{id}', function ($request, $response, $args) {
     $csrfValue = $request->getAttribute($csrfValueKey);
     
     return $this->get('View')->render($response, 'download.phtml', [
-        'router' => $this->get('router'),
         'file' => $file,
+        'model' => new Model,
 
         'csrfNameKey' => $csrfNameKey,
         'csrfValueKey' => $csrfValueKey,

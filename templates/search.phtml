@@ -1,29 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>filehosting</title>
-    <link rel="stylesheet" href="/css/jquery-ui.min.css">
-    <script type="text/javascript" src="/js/jquery-1.12.1.min.js"></script>
-    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-</head>
-<body>
-    <h1>filehosting</h1>
+{% extends 'base.html' %}
 
-    <form method="get" action="/search">
-        <input type="text" name="q" value="<?= $q ?>">
-        <input type="submit">
-    </form>
+{% block content %}
+        <form method="get" class="clearfix" action="/search">
+            <input type="text" class="form-control pull-left" name="q" value="{{ q }}">
+            <button type="submit" class="btn btn-default pull-right">Submit</button>
+        </form>
 
-    <ul>
-        <?php foreach ($files as $file) : ?>
-            <li>
-                <a href="<?= $router->pathFor('download', ['id' => $file->getId()])?>">
-                    <?= $file->getOriginalName() ?>
-                </a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-
-    <script type="text/javascript" src="/js/autocomplete.js"></script>
-</body>
-</html>
+        <ul class="list-unstyled files">
+            {% for file in files %}
+                <li>
+                    <a href="{{ path_for('download', {'id': file.getId }) }}">
+                        {{ file.getOriginalName }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul> 
+{% endblock %}

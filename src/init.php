@@ -8,7 +8,8 @@ use Doctrine\ORM\Tools\Setup;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 
-use Slim\Views\PhpRenderer as View;
+use Slim\Views\Twig as View;
+use Slim\Views\TwigExtension;
 use Slim\Csrf\Guard as Csrf;
 
 use App\Types\Ltree;
@@ -48,7 +49,12 @@ $container['SphinxConnection'] = function ($c) {
 };
 
 $container['View'] = function ($c) {
-    return new View(__DIR__ . '/../templates');
+    $view = new View(__DIR__ . '/../templates');
+
+    $basePath = rtrim(str_ireplace('index.php', '', $c['request']->getUri()->getBasePath()), '/');
+    $view->addExtension(new TwigExtension($c['router'], $basePath));
+
+    return $view;
 };
 
 $container['csrf'] = function ($c) {

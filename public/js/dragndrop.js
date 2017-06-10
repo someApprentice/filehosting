@@ -23,11 +23,11 @@ $(document).ready(function() {
 
                 xhr.upload.onprogress = function(e) {
                     $('.dropzone').css('display', 'none');
-                    $('progress').css('display', 'inline');
+                    $('.progress').css('display', 'block');
 
                     var percent = Math.round(e.loaded / e.total * 100);
 
-                    $('progress').attr('value', percent);
+                    $('.progress-bar').css('width', percent + "%");
                 };
 
                 return xhr;
