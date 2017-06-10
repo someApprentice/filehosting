@@ -111,7 +111,7 @@ class File
 
     public function getInfo()
     {
-        return $this->info;
+        return json_decode($this->info);
     }
 
     public function setInfo(string $info)
@@ -145,6 +145,7 @@ class File
     public function isAudio()
     {
         $audioTypes = array(
+            'audio/mp3',
             'audio/mpeg',
             'audio/ogg',
             'audio/wav'
