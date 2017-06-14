@@ -46,24 +46,28 @@ class Model
 
     public static function generateThumbnail(File $file)
     {
-        $image = new \Imagick(__DIR__ . "/../public/{$file->getPath()}/{$file->getNewName()}");
+        if ($file->isImage()) {
+            $image = new \Imagick(__DIR__ . "/../public/{$file->getPath()}/{$file->getNewName()}");
 
-        $thumbnailPath = $file->getThumbnail();
+            $thumbnailPath = $file->getThumbnail();
 
-        if ($image->getImageFormat() == 'GIF') {
-            $image = $image->coalesceImages();
+            if ($image->getImageFormat() == 'GIF') {
+                $image = $image->coalesceImages();
 
-            foreach ($image as $frame) {
-                $frame->thumbnailImage(540, 0);
+                foreach ($image as $frame) {
+                    $frame->thumbnailImage(540, 0);
+                }
+
+                $image = $image->deconstructImages();
+                $image->writeImages(__DIR__ . "/../public/{$thumbnailPath}", true);
+            } else {
+                $image->thumbnailImage(540, 0);
+
+                $image->writeImage(__DIR__ . "/../public/{$thumbnailPath}");
             }
-
-            $image = $image->deconstructImages();
-            $image->writeImages(__DIR__ . "/../public/{$thumbnailPath}", true);
         } else {
-            $image->thumbnailImage(540, 0);
-
-            $image->writeImage(__DIR__ . "/../public/{$thumbnailPath}");
+            throw new \Exception("File is not image");
+            
         }
-
     }
 }
