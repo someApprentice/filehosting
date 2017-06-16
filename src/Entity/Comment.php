@@ -20,7 +20,7 @@ class Comment
     /** @Column(type="string") **/
     protected $author;
 
-    /** @Column(type="datetime") **/
+    /** @Column(type="datetimetz") **/
     protected $date;
 
     /** @Column(type="text") **/

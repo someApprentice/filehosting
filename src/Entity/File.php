@@ -15,7 +15,7 @@ class File
     /** @Column(type="string") **/
     protected $newname;
 
-    /** @Column(type="datetime") **/
+    /** @Column(type="datetimetz") **/
     protected $date;
 
     /** @Column(type="integer") **/
