@@ -31,7 +31,7 @@
             <audio class="media" src="/{{ file.getPath() }}/{{ file.getNewName() }}" controls></audio>
 
             <ul class="list-unstyled">
-                <li><b>Format</b>: {{ file.getInfo().info.dataformat }}</li>
+                <li><strong>Format</strong>: {{ file.getInfo().info.dataformat }}</li>
                 <li class="quality">{{ file.getInfo().info.sample_rate }} Hz, {{ file.getInfo().info.bitrate }} bps, {{ file.getInfo().info.channelmode }}</li>
             </ul>
         </div>
@@ -43,9 +43,9 @@
         </div>
 
         <ul class="list-unstyled">
-            <li><b>Format:</b> {{ file.getInfo().format }}</li>
-            <li><b>Width:</b> {{ file.getInfo().resolution_x }}px</li>
-            <li><b>Height:</b> {{ file.getInfo().resolution_y }}px</li>
+            <li><strong>Format:</strong> {{ file.getInfo().format }}</li>
+            <li><strong>Width:</strong> {{ file.getInfo().resolution_x }}px</li>
+            <li><strong>Height:</strong> {{ file.getInfo().resolution_y }}px</li>
         </ul>
     {% endif %}
 
@@ -55,7 +55,7 @@
         </div>
 
         <div class="quality">
-            <b>Video:</b> {{ file.getInfo().codec }}, {{ file.getInfo().resolution_x }}x{{ file.getInfo().resolution_y }}, {{ file.getInfo().frame_rate }} fps, {{ file.getInfo().bitrate }} bps
+            <strong>Video:</strong> {{ file.getInfo().codec }}, {{ file.getInfo().resolution_x }}x{{ file.getInfo().resolution_y }}, {{ file.getInfo().frame_rate }} fps, {{ file.getInfo().bitrate }} bps
         </div>
     {% endif %}
 
@@ -78,7 +78,7 @@
 
         {% for comment in file.getComments() %}
             <div class="comment" style="margin-left:{{ comment.getDepth() * 20 }}px">
-                <b>{{ comment.getAuthor() }}</b> <span class="date">{{ comment.getDate().format('Y-m-d H:i:s') }}</span>
+                <strong>{{ comment.getAuthor() }}</strong> <span class="date">{{ comment.getDate().format('Y-m-d H:i:s') }}</span>
                 <div class="content">
                     {{ comment.getContent() }}
                 </div>
