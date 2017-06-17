@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Slim\Csrf\Guard;
 use Slim\Views\Twig as View;
 
@@ -93,7 +94,7 @@ class DownloadController
 
         $file = $em->getRepository('App\Entity\File')->find($args['id']);
 
-        header("Content-disposition: attachment; filename={$file->getOriginalName()}");
+        header("Content-disposition: attachment; filename=\"{$file->getOriginalName()}\"");
         header("Content-Type: {$file->getMimeType()}");
 
         readfile(__DIR__ . "/../../public/{$file->getPath()}/{$file->getNewName()}");
