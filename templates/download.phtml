@@ -2,29 +2,61 @@
 
 {% block content %}
     <h2>{{ file.getOriginalName() }}</h2>
+    <span>{{ file.getDate().format('Y-m-d H:i:s') }}</span>
 
     {% if file.isImage() %}
-        <img class="media" src="/{{ file.getThumbnail() }}">
+        <div>
+            <img class="media" src="/{{ file.getThumbnail() }}">
+        </div>
+
+        <ul class="list-unstyled">
+            <li><b>Format:</b> {{ file.getInfo().format }}</li>
+            <li><b>Width:</b> {{ file.getInfo().resolution_x }}px</li>
+            <li><b>Height:</b> {{ file.getInfo().resolution_y }}px</li>
+        </ul>
     {% endif %}
 
     {% if file.isAudio() %}
-        <audio class="media" src="/{{ file.getPath() }}/{{ file.getNewName() }}" controls></audio>
+        <div class="media-player clearfix">
+            {% if file.getThumbnail() is not empty %}          
+                <img class="media audio-artwork" src="/{{ file.getThumbnail() }}">
+            {% endif %}
+
+            {% if file.getInfo() is not empty %}
+                {% if file.getInfo().tags.id3v2.artist is defined %}
+                    <div>
+                        {% if file.getInfo().tags.id3v2.album is defined %}
+                           <h4 class="album">{{ file.getInfo().tags.id3v2.album }}</h4>
+                        {% endif %}
+
+                        <h3 class="artist">{{ file.getInfo().tags.id3v2.artist }}</h3>
+
+                        {% if file.getInfo().tags.id3v2.title is defined %}
+                           — <span class="title">{{ file.getInfo().tags.id3v2.title }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            <audio class="media" src="/{{ file.getPath() }}/{{ file.getNewName() }}" controls></audio>
+
+            <ul class="list-unstyled">
+                <li><b>Format</b>: {{ file.getInfo().info.dataformat }}</li>
+                <li class="quality">{{ file.getInfo().info.sample_rate }} Hz, {{ file.getInfo().info.bitrate }} bps, {{ file.getInfo().info.channelmode }}</li>
+            </ul>
+        </div>
     {% endif %}    
 
     {% if file.isVideo() %}
-        <video class="media" src="/{{ file.getPath() }}/{{ file.getNewName() }}" controls></video>
+        <div class="media-player">
+            <video class="media" src="/{{ file.getPath() }}/{{ file.getNewName() }}" controls></video>
+
+            <div class="quality"><b>Video:</b> {{ file.getInfo().codec }}, {{ file.getInfo().resolution_x }}x{{ file.getInfo().resolution_y }}, {{ file.getInfo().frame_rate }} fps, {{ file.getInfo().bitrate }} bps</div>
+        </div>
     {% endif %}
 
-    <ul class="list-unstyled files">
-        <li>Date: {{ file.getDate().format('Y-m-d H:i:s') }}</li>
-        <li>Size: {{ file.getSize() }}</li>
-        <li>Type: {{ file.getMimeType() }}</li>
-
-        <!-- mb somthing more -->
-    </ul>
-
     <a href="{{ path_for('dwnld', {'id': file.getId()}) }}">
-        Download {{ file.getOriginalName() }}
+        Download {{ file.getOriginalName() }} ({{ file.getSize() }} bytes)
     </a>
 
     <hr>

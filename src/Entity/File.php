@@ -129,11 +129,17 @@ class File
         return json_decode($this->info);
     }
 
-    public function setInfo(string $info)
+    public function setInfo($info)
     {
-        $this->info = $info;
+        $info = json_encode($info);
 
-        return $this;
+        if ($info) {
+            $this->info = $info;
+
+            return $this;
+        } else {
+            throw new \Exception("Info encode error");
+        }
     }
 
     public function getComments()

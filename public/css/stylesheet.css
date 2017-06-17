@@ -17,6 +17,10 @@ h1 {
     line-height: 20px;
 }
 
+h2 {
+    display: inline-block;
+}
+
 .container {
     border: solid 1px #e7e7e7;
     border-radius: 5px;
@@ -66,8 +70,28 @@ form[action="/search"] > input[type="text"] {
     font-size: 18px;
 }
 
+.artist {
+    display: inline-block;
+    margin: 0px;
+    font-size: 16px;
+}
+
+.quality {
+    font-size: 12px;
+}
+
 .media {
     margin: 10px 0;
+}
+
+.media-player {
+    margin: 10px 0;
+}
+
+.audio-artwork {
+    float: left;
+    margin-right: 10px;
+    width: 160px;
 }
 
 .comments {

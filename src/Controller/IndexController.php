@@ -75,7 +75,7 @@ class IndexController
 
             $file->moveTo(__DIR__ . "/../../public/files/$path/$newName");
 
-            $info = $getID3->analyze(__DIR__ . "/../../public/files/$path/$newName");
+            $analyze = $getID3->analyze(__DIR__ . "/../../public/files/$path/$newName");
 
             $file = new File();
             $file->setOriginalName($originalName);
@@ -84,9 +84,30 @@ class IndexController
             $file->setSize($size);
             $file->setPath("files/$path");
             $file->setMimeType($mimetype);
-            $file->setInfo(json_encode($info, JSON_UNESCAPED_UNICODE));
+            $file->setInfo(array());
 
-            if ($file->isImage($mimetype)) {
+            if ($file->isAudio()) {
+                $info = Model::fillAudioInfoFromGetID3($analyze);
+
+                $file->setInfo($info);
+
+                if (isset($analyze['id3v2']['APIC'][0]['data'])) {
+                    mkdir(__DIR__ . "/../../public/thumbnails/$path");
+
+                    $file->setThumbnail("thumbnails/$path/$newName.jpg");
+
+                    $raw = $analyze['id3v2']['APIC'][0]['data'];
+                    $path = $file->getThumbnail();
+
+                    Model::generateThumbnailFromRaw($raw, $path);
+                }
+            }
+
+            if ($file->isImage()) {
+                $info = Model::fillImageInfoFromGetID3($analyze);
+
+                $file->setInfo($info);
+
                 mkdir(__DIR__ . "/../../public/thumbnails/$path");
 
                 $file->setThumbnail("thumbnails/$path/$newName");
@@ -94,10 +115,14 @@ class IndexController
                 Model::generateThumbnail($file);
             }
 
+            if ($file->isVideo()) {
+                $info = Model::fillVideoInfoFromGetID3($analyze);
+
+                $file->setInfo($info);
+            }
+
             $em->persist($file);
             $em->flush();
-
-            $file = $em->getRepository('App\Entity\File')->findOneBy(['path' => "files/$path", 'newname' => $newName]);
 
             $st = $sphinxSearch->prepare("INSERT INTO rt_files (id, originalname) VALUES (:id, :originalname)");
             $st->bindValue(':id', $file->getId());

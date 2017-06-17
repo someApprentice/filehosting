@@ -70,4 +70,71 @@ class Model
             
         }
     }
+
+    public static function generateThumbnailFromRaw(string $raw, string $path)
+    {
+        $image = new \Imagick();
+
+        $image->readImageBlob($raw);
+
+        $image->writeImage(__DIR__ . "/../public/{$path}");
+    }
+
+    public static function fillAudioInfoFromGetID3(array $analyze)
+    {
+        $info = array();
+
+        $allowedInfoKeys = array(
+            'dataformat',
+            'sample_rate',
+            'bitrate',
+            'channelmode'
+        );
+
+        $allowedTagKeys = array(
+            'artist',
+            'album',
+            'title',
+            'track_number',
+            'year'
+        );
+
+        foreach ($analyze['audio'] as $key => $value) {
+            if (in_array($key, $allowedInfoKeys)) {
+                $info['info'][$key] = $value;
+            }
+        }
+
+        foreach ($analyze['tags']['id3v2'] as $key => $value) {
+            if (in_array($key, $allowedTagKeys)) {
+                $info['tags']['id3v2'][$key] = $value[0];
+            }
+        }
+
+        return $info;
+    }
+
+    public static function fillImageInfoFromGetID3(array $analyze)
+    {
+        $info = array();
+
+        $info['format'] = $analyze['fileformat'];
+        $info['resolution_x'] = $analyze['video']['resolution_x']; 
+        $info['resolution_y'] = $analyze['video']['resolution_y'];
+    
+        return $info;
+    }
+
+    public static function fillVideoInfoFromGetID3(array $analyze)
+    {
+        $info = array();
+
+        $info['codec'] = $analyze['video']['fourcc'];
+        $info['resolution_x'] = $analyze['video']['resolution_x'];
+        $info['resolution_y'] = $analyze['video']['resolution_y'];
+        $info['frame_rate'] = $analyze['video']['frame_rate'];
+        $info['bitrate'] = $analyze['bitrate'];
+
+        return $info;
+    }
 }
